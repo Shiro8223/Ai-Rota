@@ -1,4 +1,4 @@
-"""Solve the fixture once and store the result as fixtures/test-wings-leeds.json -> demoRota.
+"""Solve the fixture once and store the result as web/fixtures/test-wings-leeds.json -> demoRota.
 
 Run after changing the fixture:  .venv/Scripts/python -m scripts.make_demo_rota
 """

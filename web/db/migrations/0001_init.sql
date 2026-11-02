@@ -1,10 +1,9 @@
--- AI Rota Agent: initial schema. Run in the Supabase SQL editor or with `supabase db push`.
+-- AI Rota Agent: initial schema, for any Postgres 15+ (local: `npm run db:setup`; hosted: Neon).
+-- Applied in order by web/scripts/migrate.mjs (on every build, and by `npm run db:migrate`).
 -- Host the project in an EU region (spec: UK/EU hosting).
 --
--- The web app talks to these tables from the server with the service-role key, after its own
--- per-store access check (web/src/lib/auth.ts). Row-level security below means the public anon
--- key can read nothing, and a signed-in manager using the anon key could only ever see rows for
--- stores they are a member of.
+-- Only the web app's server connects (DATABASE_URL), and every query runs after its own
+-- per-store access check (web/src/lib/auth.ts). Nothing is exposed to browsers directly.
 
 -- Franchise group: owns several sites; brand defaults and locks apply to all of them.
 create table organisations (
@@ -340,38 +339,3 @@ create table rota_templates (
   created_by text not null,
   created_at timestamptz not null default now()
 );
-
--- ------------------------------------------------------------------ row-level security
-
-create or replace function public.is_store_member(sid text) returns boolean
-language sql stable security definer set search_path = public as $$
-  select exists (select 1 from store_members m where m.store_id = sid and m.user_id = auth.uid()::text)
-      or exists (
-        select 1 from stores s join org_members om on om.org_id = s.org_id
-        where s.id = sid and om.user_id = auth.uid()::text
-          and (om.store_ids is null or om.store_ids ? sid)
-      );
-$$;
-
-alter table organisations enable row level security;
-create policy "group members read their group" on organisations for select to authenticated
-  using (exists (select 1 from org_members om where om.org_id = id and om.user_id = auth.uid()::text));
-alter table org_members enable row level security;
-create policy "group members see each other" on org_members for select to authenticated
-  using (exists (select 1 from org_members me where me.org_id = org_members.org_id and me.user_id = auth.uid()::text));
-
-alter table stores enable row level security;
-create policy "members read their stores" on stores for select to authenticated using (is_store_member(id));
-
-alter table store_members enable row level security;
-create policy "members see co-members" on store_members for select to authenticated using (is_store_member(store_id));
-
-do $$
-declare t text;
-begin
-  foreach t in array array['roles', 'employees','availability','rules','rotas','rota_history','swap_requests','holidays','change_requests','audit_log','ai_calls','emails','time_entries','absences','open_shifts','rota_templates'] loop
-    execute format('alter table %I enable row level security', t);
-    execute format('create policy "store members only" on %I for all to authenticated using (is_store_member(store_id)) with check (is_store_member(store_id))', t);
-  end loop;
-end $$;
--- No policies for the anon role: the public key can read nothing.

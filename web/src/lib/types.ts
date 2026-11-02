@@ -367,6 +367,10 @@ export interface ChangeRequest {
   respondedAt: string | null;
 }
 
+/** A manager's sign-in identity (email codes; no passwords). */
+export interface User { id: string; email: string; createdAt: string; lastLoginAt: string | null }
+export interface LoginCode { id: string; email: string; codeHash: string; expiresAt: string; attempts: number; usedAt: string | null; createdAt: string }
+
 export interface AuditEntry { id: string; storeId: string; actor: string; action: string; details: Record<string, unknown>; at: string }
 export interface AiCall { id: string; storeId: string; model: string; inputTokens: number; outputTokens: number; costUsd: number; ok: boolean; demo: boolean; at: string }
 export interface EmailMsg { id: string; storeId: string; to: string; subject: string; body: string; sent: boolean; at: string }

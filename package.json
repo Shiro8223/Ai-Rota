@@ -5,6 +5,13 @@
     "setup": "node scripts/setup.mjs",
     "demo": "node scripts/dev.mjs",
     "dev": "node scripts/dev.mjs",
-    "test": "npm --prefix web test && node scripts/solver-test.mjs"
+    "test": "npm --prefix web test && node scripts/solver-test.mjs",
+    "db:setup": "node scripts/db.mjs setup",
+    "db:start": "node scripts/db.mjs start",
+    "db:stop": "node scripts/db.mjs stop",
+    "db:migrate": "node scripts/db.mjs migrate",
+    "db:reset": "node scripts/db.mjs reset",
+    "db:status": "node scripts/db.mjs status",
+    "db:psql": "node scripts/db.mjs psql"
   }
 }

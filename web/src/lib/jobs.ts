@@ -7,6 +7,7 @@ import { notify } from "./notify";
 import { loadStore } from "./org";
 import { hasFeature } from "./roles";
 import { purgeCancelled } from "./store-data";
+import { purgeLoginCodes } from "./login";
 import { alertNoShows } from "./timesheets";
 import { addDays, dayDate, mondayOf, parseDate, shiftsForStore } from "./time";
 import { zonedNow } from "./zone";
@@ -80,5 +81,6 @@ export async function runFrequent() {
 export async function runDaily() {
   const expired = await expireChangeRequests();
   const purged = await purgeCancelled();
-  return { expired, purged };
+  const codes = await purgeLoginCodes();
+  return { expired, purged, codes };
 }

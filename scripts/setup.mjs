@@ -10,6 +10,6 @@ const run = (cmd, args, cwd) => {
 };
 
 if (!hasVenv()) run(systemPython, ["-m", "venv", ".venv"], solverDir);
-run(venvPython, ["-m", "pip", "install", "-q", "-r", "requirements.txt"], solverDir);
+run(venvPython, ["-m", "pip", "install", "-q", "-r", "requirements-dev.txt"], solverDir);
 run("npm", ["install"], path.join(root, "web"));
 console.log("\nDone. Start the demo with:  npm run demo");

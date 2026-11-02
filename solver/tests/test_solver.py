@@ -14,7 +14,7 @@ from app.domain import Problem
 from app.main import app
 from app.solve import solve
 
-FIXTURE = Path(__file__).resolve().parents[2] / "fixtures" / "test-wings-leeds.json"
+FIXTURE = Path(__file__).resolve().parents[2] / "web" / "fixtures" / "test-wings-leeds.json"
 WEEK = date(2026, 11, 9)  # a Monday
 DAYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
 ANY = [{"from": "00:00", "to": "24:00"}]

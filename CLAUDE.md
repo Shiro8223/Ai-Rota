@@ -33,3 +33,4 @@ Weekly rota builder for UK restaurants: plain-English rules → AI-translated co
 - AI, email login and clock codes are rate-limited (`lib/rate-limit.ts`, in-memory).
 - Nav sections now include Timesheets (`timesheets.approve`) and Reports (`reports.view`). New staff-app strings must be added to all 8 languages.
 - `e2e/smoke.mjs` is the end-to-end check (fresh demo data required).
+- Database: `lib/db/index.ts` picks Postgres (`DATABASE_URL`, `lib/db/postgres.ts`, `pg` pool) > Supabase > demo JSON file. Local dev Postgres lives in `.pgdata` on port 5433 (`scripts/pg.mjs`, `npm run db:*`); `npm run demo` starts it. Schema = `supabase/migrations/*.sql` (`*_rls.sql` is Supabase-only). New columns: add a migration file AND the field in `types.ts` (snake_case column = camelCase field). The demo seeds into an empty Postgres on first `db()` (`lib/db/pg-seed.ts`, advisory-locked).

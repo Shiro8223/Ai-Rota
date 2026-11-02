@@ -38,8 +38,8 @@ export async function deleteAllData(storeId: string, form: FormData) {
 export async function resetDemoData() {
   if (!isDemo()) return;
   await requireManager();
-  const { resetDemo } = await import("@/lib/db/file");
-  resetDemo();
+  const { resetDemoData: reset } = await import("@/lib/db");
+  await reset();
   revalidatePath("/", "layout");
 }
 

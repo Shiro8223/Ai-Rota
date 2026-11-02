@@ -31,7 +31,7 @@ const DOCS = {
       ["Clocking in", "Staff clock in, take breaks and clock out on a shared screen at the workplace by choosing their name and entering their PIN. We record the times only; no location or device data is collected."],
       ["AI", "Rules written in plain English, and questions to the rota assistant, are sent to Anthropic's API to be understood. Pay rates are never sent. Anthropic processes this as our sub-processor and does not use it to train models."],
       ["Why", "To run the employer's rota, time and holiday processes (the employer's legitimate interests and legal obligations, e.g. working-time records), and to provide the service under contract."],
-      ["Sharing", "Sub-processors: hosting and database (Vercel, Supabase, EU/UK region), payments (Stripe, account holders only), email (Resend), SMS (Twilio, if enabled), AI (Anthropic). No data is sold."],
+      ["Sharing", "Sub-processors: hosting (Vercel) and database (Neon Postgres), EU/UK region, payments (Stripe, account holders only), email (Resend), SMS (Twilio, if enabled), AI (Anthropic). No data is sold."],
       ["How long", "While the employer's account is active, then deleted 30 days after cancellation. Employers can delete individual staff records at any time. Audit logs are kept with the account."],
       ["Your rights", "You can ask your employer, or us, for access, correction or deletion. You can complain to the ICO (ico.org.uk)."],
     ],

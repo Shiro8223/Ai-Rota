@@ -6,7 +6,8 @@ const DEV_SECRET = "demo-only-secret-change-me-in-production";
 export function secret() {
   const s = process.env.SESSION_SECRET;
   if (s && s.length >= 32) return s;
-  if (process.env.NODE_ENV === "production" && process.env.SUPABASE_URL) throw new Error("SESSION_SECRET (32+ chars) must be set in production");
+  // The dev secret is in the source code, so a deployed site (even the demo) must set its own.
+  if (process.env.NODE_ENV === "production" && !process.env.CI_ALLOW_DEV_SECRET) throw new Error("SESSION_SECRET (32+ chars) must be set in production");
   return DEV_SECRET;
 }
 

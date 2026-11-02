@@ -5,7 +5,7 @@ import type { Db, ListOpts, TableName, Tables, Where } from "./index";
 import { seedDemo } from "../seed";
 
 type Data = { [N in TableName]: Tables[N][] };
-const EMPTY: Data = { organisations: [], org_members: [], stores: [], store_members: [], roles: [], employees: [], availability: [], rules: [], rotas: [], rota_history: [], swap_requests: [], holidays: [], change_requests: [], time_entries: [], absences: [], open_shifts: [], rota_templates: [], audit_log: [], ai_calls: [], emails: [] };
+const EMPTY: Data = { organisations: [], org_members: [], stores: [], store_members: [], roles: [], employees: [], availability: [], rules: [], rotas: [], rota_history: [], swap_requests: [], holidays: [], change_requests: [], time_entries: [], absences: [], open_shifts: [], rota_templates: [], audit_log: [], ai_calls: [], emails: [], users: [], login_codes: [] };
 
 const FILE = process.env.DEMO_DB_FILE ?? path.join(process.cwd(), ".data", "demo-db.json");
 

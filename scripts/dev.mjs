@@ -1,12 +1,18 @@
 // Starts the solver (FastAPI on :8000) and the web app (Next.js on :3000) together.
 import { spawn } from "node:child_process";
 import path from "node:path";
+import fs from "node:fs";
 import { hasVenv, root, solverDir, venvPython } from "./py.mjs";
+import { DATA, start as startPg } from "./pg.mjs";
 
 if (!hasVenv()) {
   console.error("Solver environment missing. Run `npm run setup` first.");
   process.exit(1);
 }
+// Local Postgres (npm run db:setup) starts with the app when web/.env.local points at it.
+const envFile = path.join(root, "web", ".env.local");
+if (fs.existsSync(DATA) && fs.existsSync(envFile) && /^DATABASE_URL=/m.test(fs.readFileSync(envFile, "utf8"))) startPg();
+
 const procs = [
   ["solver", venvPython, ["-m", "uvicorn", "app.main:app", "--host", "127.0.0.1", "--port", "8000"], solverDir],
   ["web", "npm", ["run", "dev"], path.join(root, "web")],
