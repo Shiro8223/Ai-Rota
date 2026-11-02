@@ -2,7 +2,7 @@
 
 Weekly rota builder for UK restaurants: plain-English rules → AI-translated constraints → OR-Tools solver → manager approval. See `README.md` for running it and `MVP_SPEC.md` (copied from https://claude.ai/artifact/NYzjjUmBfQngN68VwvateY) for the spec.
 
-- Status: all 7 milestones implemented. Demo mode (no `SUPABASE_URL`) runs on the Test Wings fixture and is tested end to end. The Supabase path is untested against a live project.
+- Status: all milestones implemented. Demo mode (`DEMO_MODE=1`, or no `DATABASE_URL`) runs on the Test Wings fixture (`web/fixtures`) and is tested end to end locally and on Vercel. No Supabase (removed at the owner's request): data = Postgres, manager sign-in = our own email codes (`lib/login.ts`, Resend).
 - `npm run demo` starts both services; `npm test` runs vitest + pytest.
 - `check_rota` (solver/app/check.py) is the ONLY rule checker: the solver output, the editor's live warnings and swaps all use it via `POST /check`. Don't add a second checker in TypeScript.
 - Constraint types are a closed list, mirrored in `web/src/lib/constraints.ts` (Zod) and `solver/app/domain.py` (Pydantic). Change both together.
@@ -33,4 +33,5 @@ Weekly rota builder for UK restaurants: plain-English rules → AI-translated co
 - AI, email login and clock codes are rate-limited (`lib/rate-limit.ts`, in-memory).
 - Nav sections now include Timesheets (`timesheets.approve`) and Reports (`reports.view`). New staff-app strings must be added to all 8 languages.
 - `e2e/smoke.mjs` is the end-to-end check (fresh demo data required).
-- Database: `lib/db/index.ts` picks Postgres (`DATABASE_URL`, `lib/db/postgres.ts`, `pg` pool) > Supabase > demo JSON file. Local dev Postgres lives in `.pgdata` on port 5433 (`scripts/pg.mjs`, `npm run db:*`); `npm run demo` starts it. Schema = `supabase/migrations/*.sql` (`*_rls.sql` is Supabase-only). New columns: add a migration file AND the field in `types.ts` (snake_case column = camelCase field). The demo seeds into an empty Postgres on first `db()` (`lib/db/pg-seed.ts`, advisory-locked).
+- Database: `lib/db/index.ts` picks Postgres (`DATABASE_URL`: local `.pgdata` on port 5433 via `npm run db:*`, or Neon on Vercel) else the demo JSON file. Schema = `web/db/migrations/*.sql`, applied by `web/scripts/migrate.mjs` before every build. New columns: add a migration AND the field in `types.ts` (snake_case column = camelCase field). The demo seeds into an empty Postgres on first `db()` (`lib/db/pg-seed.ts`).
+- Deploy: two Vercel projects, `rota-agent` (web/) and `rota-agent-solver` (solver/, FastAPI via `index.py`). See README → Deployment. Hobby plan = daily crons only.

@@ -98,13 +98,12 @@ UK working-time rules are always checked and can never be overridden: 11h betwee
 
 ## Database
 
-Three options, picked automatically:
+Two options, picked automatically:
 
 | | When | Data lives in |
 | --- | --- | --- |
-| **Postgres** | `DATABASE_URL` is set | Any Postgres 15+: the local one below, or a hosted one (Neon, RDS, Supabase's own connection string...) |
-| **Supabase** | `SUPABASE_URL` is set and no `DATABASE_URL` | Supabase, through its API with row-level security (`0002_rls.sql`) |
-| **Demo file** | neither | `web/.data/demo-db.json` |
+| **Postgres** | `DATABASE_URL` is set | Any Postgres 15+: the local one below, or Neon on Vercel |
+| **Demo file** | no `DATABASE_URL` | `web/.data/demo-db.json` |
 
 **Local Postgres (recommended for development):**
 
@@ -113,11 +112,11 @@ npm run db:setup   # once: creates .pgdata, applies supabase/migrations, writes 
 npm run demo       # starts Postgres too; the demo group (Leeds + York) loads on first visit
 ```
 
-It's a private cluster inside the project on `127.0.0.1:5433` (no password, not reachable from other machines), separate from any Postgres service you already run. It uses the PostgreSQL programs on your machine (`PG_BIN` to point elsewhere). Other commands: `db:start`, `db:stop`, `db:status`, `db:migrate` (applies new files in `supabase/migrations`, skipping `*_rls.sql`), `db:reset` (wipe; the demo reloads on next start), `db:psql`. **Settings → Reset demo data** also works on Postgres.
+It's a private cluster inside the project on `127.0.0.1:5433` (no password, not reachable from other machines), separate from any Postgres service you already run. It uses the PostgreSQL programs on your machine (`PG_BIN` to point elsewhere). Other commands: `db:start`, `db:stop`, `db:status`, `db:migrate` (applies new files in `web/db/migrations`), `db:reset` (wipe; the demo reloads on next start), `db:psql`. **Settings → Reset demo data** also works on Postgres.
 
-Without Supabase sign-in configured, the app keeps the demo logins and simulated billing whichever database it uses, so this is a development setup. For production, set `DATABASE_URL` to a managed Postgres **and** configure sign-in (see below).
+`db:setup` also sets `DEMO_MODE=1` locally, which keeps the one-click demo logins and simulated billing. Leave it unset in production (see Deployment).
 
-Adapter tests: `TEST_DATABASE_URL=postgres://rota@127.0.0.1:5433/rota_test npm --prefix web test` (create `rota_test` and apply `0001_init.sql` first; the test wipes it).
+Adapter tests: `TEST_DATABASE_URL=postgres://rota@127.0.0.1:5433/rota_test npm --prefix web test` (create `rota_test` and run `DATABASE_URL=…/rota_test node web/scripts/migrate.mjs` first; the tests wipe it).
 
 ## Layout
 
@@ -138,19 +137,39 @@ npm --prefix e2e install && node e2e/smoke.mjs
 
 CI (`.github/workflows/ci.yml`) runs type-checking, both unit suites and the e2e smoke test.
 
-## Going to production
+## Deployment (Vercel)
 
-1. Create a Supabase project in an EU region and run `supabase/migrations/0001_init.sql` then `0002_rls.sql` (or `supabase db push`). Set the Magic Link email template's link to `{{ .SiteURL }}/auth/callback?token_hash={{ .TokenHash }}&type=email`, and add `{{ .Token }}` if you want the 6-digit code option too.
-2. Deploy `solver/` to Render or Fly: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`. Set `SOLVER_API_KEY`.
-3. Deploy `web/` to Vercel (EU region) with the variables in `web/.env.example`. `web/vercel.json` schedules `/api/cron/daily` (expire stale change requests, 30-day purge) and `/api/cron/frequent` every 15 minutes (reminders, no-show alerts; needs a plan that allows sub-daily crons, or call it from any scheduler with `Authorization: Bearer $CRON_SECRET`).
-   Set `MONITORING_WEBHOOK` to receive server errors (route + message only).
-4. Stripe: create Starter (£39) and Pro (£79) monthly prices, set the price IDs, and point a webhook at `/api/stripe/webhook` for `checkout.session.completed` and `customer.subscription.*`.
-5. Before the first paid customer: register with the ICO, and get a solicitor to review the **draft** terms, privacy notice and DPA at `/legal/terms`, `/legal/privacy`, `/legal/dpa` (they describe what the software really does; the liability, transfers and audit sections are placeholders).
+Two Vercel projects, both deployed from this repo:
+
+| Project | Folder | URL |
+| --- | --- | --- |
+| `rota-agent` | `web/` (Next.js) | https://rota-agent.vercel.app |
+| `rota-agent-solver` | `solver/` (FastAPI on Vercel's Python runtime) | https://rota-agent-solver.vercel.app |
+
+Deploy from each folder: `cd solver && npx vercel@latest deploy --prod`, then `cd web && npx vercel@latest deploy --prod`. To deploy on every push instead, connect the GitHub repo to each project in the Vercel dashboard and set its **Root Directory** to `web` or `solver`.
+
+Environment variables (Vercel → Project → Settings → Environment Variables):
+
+- **rota-agent-solver:** `SOLVER_API_KEY` (random; same value as on the web project).
+- **rota-agent:** `SESSION_SECRET` (random, 32+ characters), `SOLVER_URL` (the solver URL), `SOLVER_API_KEY`, and either:
+  - **Demo:** `DEMO_MODE=1`. Without a database it also needs `DEMO_DB_FILE=/tmp/demo-db.json`, which is per server instance and resets on cold starts. Add Neon (below) for demo data that persists.
+  - **Real use:** `DATABASE_URL` (Neon) with `DEMO_MODE` unset, plus `RESEND_API_KEY` and `EMAIL_FROM` for sign-in codes. `CRON_SECRET` for the scheduled jobs.
+
+**Database: Neon Postgres.** Vercel → Storage → Create → Neon (free tier, pick an EU region) → connect it to `rota-agent`. That adds `DATABASE_URL`; the next deploy runs the migrations (`web/scripts/migrate.mjs` runs before every build) and, in demo mode, loads the demo data on first visit. Remove `DEMO_DB_FILE` once `DATABASE_URL` is there.
+
+Scheduled jobs (`web/vercel.json`, times in UTC): `/api/cron/daily` at 03:00 (expire stale change requests, 30-day purge, old sign-in codes) and `/api/cron/frequent` at 17:00 (evening-before reminders). On the Hobby plan crons can only run daily; on Pro change `frequent` to `*/15 * * * *` to get no-show alerts too. Set `MONITORING_WEBHOOK` to receive server errors (route and message only).
+
+**Sign-in:** managers sign in with a one-time 6-digit code emailed through Resend (no passwords, no third-party auth service). Codes are stored only as an HMAC, last 10 minutes and allow 5 tries. Staff sign in with the store code and their PIN, as before.
+
+**Before the first paying customer:**
+1. Switch off demo mode (`DEMO_MODE` unset) with Neon and Resend configured; create your account by signing in with your email at `/login`, then add your first site.
+2. Stripe: create Starter (£39) and Pro (£79) monthly prices, set the price IDs, and point a webhook at `/api/stripe/webhook` for `checkout.session.completed` and `customer.subscription.*`.
+3. Register with the ICO, and get a solicitor to review the **draft** terms, privacy notice and DPA at `/legal/terms`, `/legal/privacy`, `/legal/dpa`.
 
 ## Notes and limits
 - The solver stops after 10 seconds per week (`SOLVER_TIME_LIMIT`) and returns the best rota found, which has always been fine for teams under 50.
-- In production the server uses the Supabase service-role key after its own per-store access check. RLS blocks the public key entirely.
-- The Supabase path is written but hasn't been run against a live project yet. Demo mode is what's been tested end to end.
-- Web push, SMS (Twilio), Stripe group billing and the payroll layouts are written against the providers' documented APIs/formats but not exercised against live accounts.
+- Only the web server talks to the database, after its own per-store access check (`lib/auth.ts`); nothing in the browser can reach it.
+- Tested end to end: demo mode locally and on Vercel (with the deployed solver). The Postgres adapter and email sign-in are covered by tests against real Postgres. Real (non-demo) mode with Neon + Resend hasn't been run against live accounts yet.
+- Web push, SMS (Twilio), Resend sign-in emails, Stripe group billing and the payroll layouts are written against the providers' documented APIs/formats but not exercised against live accounts.
 - Rate limiting is in memory per server instance; on multi-instance hosting put a shared store (e.g. Upstash Redis) behind `lib/rate-limit.ts`.
 - Manager pages beyond navigation are still English only.
