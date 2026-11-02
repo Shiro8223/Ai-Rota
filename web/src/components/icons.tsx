@@ -2,6 +2,7 @@ import type { SVGProps } from "react";
 
 /** Small stroke icon set (24px grid, 1.75 stroke) so the app has no icon dependency. */
 const paths = {
+  menu: "M4 6h16M4 12h16M4 18h16",
   phone: "M5 4h3l2 5-2.5 1.5a11 11 0 0 0 6 6L15 14l5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z",
   coffee: "M17 8h1a3 3 0 0 1 0 6h-1M3 8h14v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8ZM7 2v3M11 2v3",
   search: "m21 21-4.3-4.3M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14Z",
