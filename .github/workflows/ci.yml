@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+
+  solver:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: solver
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: solver/requirements.txt
+      - run: pip install -r requirements.txt
+      - run: python -m pytest -q
+
+  e2e:
+    # Demo mode end to end: starts the solver + web app on the fixture data and drives Chrome.
+    needs: [web, solver]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: npm run setup
+      - run: npm --prefix web run build
+      - name: Start services
+        run: |
+          (cd solver && .venv/bin/python -m uvicorn app.main:app --port 8000 &)
+          (cd web && npx next start -p 3000 &)
+          npx --yes wait-on@8 http://localhost:8000/health http://localhost:3000/login
+      - run: npm --prefix e2e install && node e2e/smoke.mjs
+        env:
+          CHROME_PATH: /usr/bin/google-chrome

@@ -1,0 +1,4 @@
+node_modules
+solver/.venv
+__pycache__
+.pytest_cache

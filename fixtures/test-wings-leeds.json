@@ -1,0 +1,791 @@
+{
+  "_comment": "Demo store used in every milestone. Dates are relative: startDaysAgo is converted to a real startDate when seeded, so new starters stay new.",
+  "store": {
+    "name": "Test Wings, Leeds",
+    "timezone": "Europe/London",
+    "joinCode": "WINGS1",
+    "openingHours": {
+      "mon": {
+        "open": "10:00",
+        "close": "23:00"
+      },
+      "tue": {
+        "open": "10:00",
+        "close": "23:00"
+      },
+      "wed": {
+        "open": "10:00",
+        "close": "23:00"
+      },
+      "thu": {
+        "open": "10:00",
+        "close": "23:00"
+      },
+      "fri": {
+        "open": "10:00",
+        "close": "23:00"
+      },
+      "sat": {
+        "open": "10:00",
+        "close": "23:00"
+      },
+      "sun": {
+        "open": "10:00",
+        "close": "23:00"
+      }
+    },
+    "shiftTemplates": [
+      {
+        "id": "open",
+        "name": "Open",
+        "start": "10:00",
+        "end": "16:00",
+        "days": [
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
+        ],
+        "minStaff": 3,
+        "maxStaff": 5,
+        "color": "amber",
+        "breakMinutes": 30,
+        "requirements": [
+          {
+            "role": "Back of House",
+            "min": 1
+          }
+        ]
+      },
+      {
+        "id": "mid",
+        "name": "Mid",
+        "start": "12:00",
+        "end": "18:00",
+        "days": [
+          "fri",
+          "sat",
+          "sun"
+        ],
+        "minStaff": 2,
+        "maxStaff": 4,
+        "color": "sky",
+        "breakMinutes": 30,
+        "requirements": [
+          {
+            "role": "Front of House",
+            "min": 1
+          }
+        ]
+      },
+      {
+        "id": "close",
+        "name": "Close",
+        "start": "16:00",
+        "end": "23:00",
+        "days": [
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
+        ],
+        "minStaff": 4,
+        "maxStaff": 6,
+        "color": "indigo",
+        "breakMinutes": 30,
+        "requirements": [
+          {
+            "role": "Shift Lead",
+            "min": 1
+          },
+          {
+            "role": "Back of House",
+            "min": 2
+          }
+        ]
+      }
+    ]
+  },
+  "employees": [
+    {
+      "key": "alex",
+      "name": "Alex Morgan",
+      "role": "Shift Lead",
+      "startDaysAgo": 900,
+      "contractedHours": 37.5,
+      "maxHoursPerWeek": 48,
+      "isUnder18": false,
+      "availability": "any",
+      "isStudent": false
+    },
+    {
+      "key": "priya",
+      "name": "Priya Shah",
+      "role": "Shift Lead",
+      "startDaysAgo": 600,
+      "contractedHours": 37.5,
+      "maxHoursPerWeek": 45,
+      "isUnder18": false,
+      "availability": "any",
+      "isStudent": false
+    },
+    {
+      "key": "jordan",
+      "name": "Jordan Lee",
+      "role": "Shift Lead",
+      "startDaysAgo": 400,
+      "contractedHours": 35,
+      "maxHoursPerWeek": 45,
+      "isUnder18": false,
+      "availability": "any",
+      "isStudent": false
+    },
+    {
+      "key": "sam",
+      "name": "Sam Okafor",
+      "role": "Shift Lead",
+      "startDaysAgo": 300,
+      "contractedHours": 30,
+      "maxHoursPerWeek": 40,
+      "isUnder18": false,
+      "availability": {
+        "mon": "any",
+        "tue": "any",
+        "wed": "any",
+        "thu": "any",
+        "fri": "any",
+        "sat": "any"
+      },
+      "isStudent": false
+    },
+    {
+      "key": "ben",
+      "name": "Ben Carter",
+      "role": "Cook",
+      "startDaysAgo": 1200,
+      "contractedHours": 37.5,
+      "maxHoursPerWeek": 48,
+      "isUnder18": false,
+      "availability": "any",
+      "isStudent": false
+    },
+    {
+      "key": "chloe",
+      "name": "Chloe Davies",
+      "role": "Cook",
+      "startDaysAgo": 500,
+      "contractedHours": 30,
+      "maxHoursPerWeek": 40,
+      "isUnder18": false,
+      "availability": "any",
+      "isStudent": false
+    },
+    {
+      "key": "dan",
+      "name": "Dan Wright",
+      "role": "Cook",
+      "startDaysAgo": 45,
+      "contractedHours": 24,
+      "maxHoursPerWeek": 35,
+      "isUnder18": false,
+      "availability": {
+        "mon": [
+          [
+            "16:00",
+            "23:00"
+          ]
+        ],
+        "tue": [
+          [
+            "16:00",
+            "23:00"
+          ]
+        ],
+        "wed": [
+          [
+            "16:00",
+            "23:00"
+          ]
+        ],
+        "thu": [
+          [
+            "16:00",
+            "23:00"
+          ]
+        ],
+        "fri": [
+          [
+            "16:00",
+            "23:00"
+          ]
+        ],
+        "sat": [
+          [
+            "16:00",
+            "23:00"
+          ]
+        ]
+      },
+      "isStudent": false
+    },
+    {
+      "key": "ella",
+      "name": "Ella Hughes",
+      "role": "Cook",
+      "startDaysAgo": 200,
+      "contractedHours": 18,
+      "maxHoursPerWeek": 30,
+      "isUnder18": false,
+      "availability": {
+        "fri": [
+          [
+            "16:00",
+            "23:00"
+          ]
+        ],
+        "sat": "any",
+        "sun": "any"
+      },
+      "isStudent": false
+    },
+    {
+      "key": "femi",
+      "name": "Femi Adeyemi",
+      "role": "Cook",
+      "startDaysAgo": 20,
+      "contractedHours": 16,
+      "maxHoursPerWeek": 30,
+      "isUnder18": false,
+      "availability": "any",
+      "isStudent": false
+    },
+    {
+      "key": "casey",
+      "name": "Casey Brooks",
+      "role": "Server",
+      "startDaysAgo": 350,
+      "contractedHours": 30,
+      "maxHoursPerWeek": 40,
+      "isUnder18": false,
+      "availability": "any",
+      "isStudent": false
+    },
+    {
+      "key": "grace",
+      "name": "Grace Kim",
+      "role": "Server",
+      "startDaysAgo": 60,
+      "contractedHours": 13,
+      "maxHoursPerWeek": 30,
+      "isUnder18": false,
+      "availability": {
+        "mon": [
+          [
+            "16:00",
+            "23:00"
+          ]
+        ],
+        "tue": [
+          [
+            "16:00",
+            "23:00"
+          ]
+        ],
+        "wed": [
+          [
+            "16:00",
+            "23:00"
+          ]
+        ],
+        "thu": [
+          [
+            "16:00",
+            "23:00"
+          ]
+        ],
+        "fri": [
+          [
+            "16:00",
+            "23:00"
+          ]
+        ],
+        "sat": [
+          [
+            "16:00",
+            "23:00"
+          ]
+        ],
+        "sun": [
+          [
+            "16:00",
+            "23:00"
+          ]
+        ]
+      },
+      "isStudent": true
+    },
+    {
+      "key": "harry",
+      "name": "Harry Patel",
+      "role": "Server",
+      "startDaysAgo": 15,
+      "contractedHours": 16,
+      "maxHoursPerWeek": 25,
+      "isUnder18": false,
+      "availability": "any",
+      "isStudent": true
+    },
+    {
+      "key": "mia",
+      "name": "Mia Thompson",
+      "role": "Server",
+      "startDaysAgo": 700,
+      "contractedHours": 25,
+      "maxHoursPerWeek": 35,
+      "isUnder18": false,
+      "availability": "any",
+      "isStudent": false
+    },
+    {
+      "key": "olivia",
+      "name": "Olivia Brown",
+      "role": "Server",
+      "startDaysAgo": 120,
+      "contractedHours": 11,
+      "maxHoursPerWeek": 20,
+      "isUnder18": true,
+      "availability": {
+        "mon": [
+          [
+            "16:00",
+            "22:00"
+          ]
+        ],
+        "wed": [
+          [
+            "16:00",
+            "22:00"
+          ]
+        ],
+        "fri": [
+          [
+            "16:00",
+            "22:00"
+          ]
+        ],
+        "sat": "any",
+        "sun": "any"
+      },
+      "isStudent": false
+    },
+    {
+      "key": "tom",
+      "name": "Tom Evans",
+      "role": "Server",
+      "startDaysAgo": 30,
+      "contractedHours": 10,
+      "maxHoursPerWeek": 16,
+      "isUnder18": true,
+      "availability": {
+        "sat": [
+          [
+            "10:00",
+            "18:00"
+          ]
+        ],
+        "sun": [
+          [
+            "10:00",
+            "18:00"
+          ]
+        ]
+      },
+      "isStudent": false
+    }
+  ],
+  "rules": [
+    {
+      "originalText": "Never put two new starters on closing",
+      "status": "confirmed",
+      "constraint": {
+        "type": "max_count",
+        "shift": "close",
+        "day": "*",
+        "filter": {
+          "field": "tenureDays",
+          "op": "lt",
+          "value": 90
+        },
+        "max": 1,
+        "hard": true
+      }
+    },
+    {
+      "originalText": "Always have at least one shift lead on every shift",
+      "status": "confirmed",
+      "constraint": {
+        "type": "min_count",
+        "shift": "*",
+        "day": "*",
+        "filter": {
+          "field": "role",
+          "op": "eq",
+          "value": "Shift Lead"
+        },
+        "min": 1,
+        "hard": true
+      }
+    },
+    {
+      "originalText": "Don't put Jordan and Casey on together",
+      "status": "confirmed",
+      "constraint": {
+        "type": "never_together",
+        "employees": [
+          "jordan",
+          "casey"
+        ],
+        "hard": true
+      }
+    },
+    {
+      "originalText": "Priya can't do Sunday mornings",
+      "status": "confirmed",
+      "constraint": {
+        "type": "unavailable",
+        "employee": "priya",
+        "shift": "open",
+        "day": "sun",
+        "hard": true
+      }
+    },
+    {
+      "originalText": "Mia would rather work weekends",
+      "status": "confirmed",
+      "constraint": {
+        "type": "prefer",
+        "employee": "mia",
+        "filter": null,
+        "shift": "*",
+        "day": "weekend",
+        "avoid": false,
+        "weight": 3,
+        "hard": false
+      }
+    },
+    {
+      "originalText": "At least one back of house on every shift",
+      "status": "pending",
+      "constraint": {
+        "type": "min_count",
+        "shift": "*",
+        "day": "*",
+        "filter": {
+          "field": "role",
+          "op": "eq",
+          "value": "Back of House"
+        },
+        "min": 1,
+        "hard": true
+      }
+    }
+  ],
+  "demoRota": [
+    {
+      "shiftId": "open:mon",
+      "employee": "femi"
+    },
+    {
+      "shiftId": "open:mon",
+      "employee": "jordan"
+    },
+    {
+      "shiftId": "open:mon",
+      "employee": "sam"
+    },
+    {
+      "shiftId": "close:mon",
+      "employee": "ben"
+    },
+    {
+      "shiftId": "close:mon",
+      "employee": "casey"
+    },
+    {
+      "shiftId": "close:mon",
+      "employee": "dan"
+    },
+    {
+      "shiftId": "close:mon",
+      "employee": "priya"
+    },
+    {
+      "shiftId": "open:tue",
+      "employee": "alex"
+    },
+    {
+      "shiftId": "open:tue",
+      "employee": "ben"
+    },
+    {
+      "shiftId": "open:tue",
+      "employee": "harry"
+    },
+    {
+      "shiftId": "open:tue",
+      "employee": "sam"
+    },
+    {
+      "shiftId": "close:tue",
+      "employee": "chloe"
+    },
+    {
+      "shiftId": "close:tue",
+      "employee": "dan"
+    },
+    {
+      "shiftId": "close:tue",
+      "employee": "jordan"
+    },
+    {
+      "shiftId": "close:tue",
+      "employee": "mia"
+    },
+    {
+      "shiftId": "open:wed",
+      "employee": "casey"
+    },
+    {
+      "shiftId": "open:wed",
+      "employee": "femi"
+    },
+    {
+      "shiftId": "open:wed",
+      "employee": "sam"
+    },
+    {
+      "shiftId": "close:wed",
+      "employee": "alex"
+    },
+    {
+      "shiftId": "close:wed",
+      "employee": "ben"
+    },
+    {
+      "shiftId": "close:wed",
+      "employee": "chloe"
+    },
+    {
+      "shiftId": "close:wed",
+      "employee": "grace"
+    },
+    {
+      "shiftId": "close:wed",
+      "employee": "jordan"
+    },
+    {
+      "shiftId": "close:wed",
+      "employee": "priya"
+    },
+    {
+      "shiftId": "open:thu",
+      "employee": "casey"
+    },
+    {
+      "shiftId": "open:thu",
+      "employee": "chloe"
+    },
+    {
+      "shiftId": "open:thu",
+      "employee": "harry"
+    },
+    {
+      "shiftId": "open:thu",
+      "employee": "sam"
+    },
+    {
+      "shiftId": "close:thu",
+      "employee": "alex"
+    },
+    {
+      "shiftId": "close:thu",
+      "employee": "ben"
+    },
+    {
+      "shiftId": "close:thu",
+      "employee": "dan"
+    },
+    {
+      "shiftId": "close:thu",
+      "employee": "priya"
+    },
+    {
+      "shiftId": "open:fri",
+      "employee": "chloe"
+    },
+    {
+      "shiftId": "open:fri",
+      "employee": "harry"
+    },
+    {
+      "shiftId": "open:fri",
+      "employee": "jordan"
+    },
+    {
+      "shiftId": "mid:fri",
+      "employee": "mia"
+    },
+    {
+      "shiftId": "mid:fri",
+      "employee": "sam"
+    },
+    {
+      "shiftId": "close:fri",
+      "employee": "alex"
+    },
+    {
+      "shiftId": "close:fri",
+      "employee": "casey"
+    },
+    {
+      "shiftId": "close:fri",
+      "employee": "dan"
+    },
+    {
+      "shiftId": "close:fri",
+      "employee": "ella"
+    },
+    {
+      "shiftId": "close:fri",
+      "employee": "priya"
+    },
+    {
+      "shiftId": "open:sat",
+      "employee": "ella"
+    },
+    {
+      "shiftId": "open:sat",
+      "employee": "olivia"
+    },
+    {
+      "shiftId": "open:sat",
+      "employee": "sam"
+    },
+    {
+      "shiftId": "mid:sat",
+      "employee": "jordan"
+    },
+    {
+      "shiftId": "mid:sat",
+      "employee": "tom"
+    },
+    {
+      "shiftId": "close:sat",
+      "employee": "alex"
+    },
+    {
+      "shiftId": "close:sat",
+      "employee": "ben"
+    },
+    {
+      "shiftId": "close:sat",
+      "employee": "chloe"
+    },
+    {
+      "shiftId": "close:sat",
+      "employee": "mia"
+    },
+    {
+      "shiftId": "close:sat",
+      "employee": "priya"
+    },
+    {
+      "shiftId": "open:sun",
+      "employee": "femi"
+    },
+    {
+      "shiftId": "open:sun",
+      "employee": "jordan"
+    },
+    {
+      "shiftId": "open:sun",
+      "employee": "tom"
+    },
+    {
+      "shiftId": "mid:sun",
+      "employee": "olivia"
+    },
+    {
+      "shiftId": "mid:sun",
+      "employee": "priya"
+    },
+    {
+      "shiftId": "close:sun",
+      "employee": "alex"
+    },
+    {
+      "shiftId": "close:sun",
+      "employee": "ben"
+    },
+    {
+      "shiftId": "close:sun",
+      "employee": "casey"
+    },
+    {
+      "shiftId": "close:sun",
+      "employee": "ella"
+    },
+    {
+      "shiftId": "close:sun",
+      "employee": "grace"
+    },
+    {
+      "shiftId": "close:sun",
+      "employee": "mia"
+    }
+  ],
+  "temporaryAvailability": [
+    {
+      "employee": "harry",
+      "startWeeksFromNow": 1,
+      "weeks": 3,
+      "status": "pending",
+      "note": "University exams",
+      "availability": {
+        "sat": "any",
+        "sun": [
+          [
+            "10:00",
+            "16:00"
+          ]
+        ]
+      }
+    },
+    {
+      "employee": "grace",
+      "startWeeksFromNow": 1,
+      "weeks": 1,
+      "status": "approved",
+      "note": "Reading week",
+      "availability": "any"
+    }
+  ],
+  "roleMap": {
+    "Shift Lead": [
+      "Shift Lead",
+      "Front of House"
+    ],
+    "Cook": [
+      "Back of House"
+    ],
+    "Server": [
+      "Front of House"
+    ]
+  }
+}

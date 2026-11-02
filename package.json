@@ -1,0 +1,10 @@
+{
+  "name": "ai-rota-agent",
+  "private": true,
+  "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "demo": "node scripts/dev.mjs",
+    "dev": "node scripts/dev.mjs",
+    "test": "npm --prefix web test && node scripts/solver-test.mjs"
+  }
+}
