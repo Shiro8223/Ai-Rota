@@ -146,7 +146,7 @@ Two Vercel projects, both deployed from this repo:
 | `rota-agent` | `web/` (Next.js) | https://rota-agent.vercel.app |
 | `rota-agent-solver` | `solver/` (FastAPI on Vercel's Python runtime) | https://rota-agent-solver.vercel.app |
 
-Deploy from each folder: `cd solver && npx vercel@latest deploy --prod`, then `cd web && npx vercel@latest deploy --prod`. To deploy on every push instead, connect the GitHub repo to each project in the Vercel dashboard and set its **Root Directory** to `web` or `solver`.
+**Web:** connected to the GitHub repo, so every push to `main` deploys it (project Root Directory = `web`; it must stay set, or the build fails with "Couldn't find any `pages` or `app` directory"). **Solver:** deploy by hand from its folder, `cd solver && npx vercel@latest deploy --prod` (or connect it too with Root Directory = `solver`).
 
 Environment variables (Vercel → Project → Settings → Environment Variables):
 
