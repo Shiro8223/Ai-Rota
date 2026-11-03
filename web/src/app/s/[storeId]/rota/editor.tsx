@@ -654,7 +654,7 @@ export function RotaEditor(p: Props) {
   return (
     <div className="space-y-6">
       <div className="min-w-0">
-        <div className="no-print mb-4 flex flex-wrap items-center gap-2">
+        <div className="no-print relative mb-4 flex flex-wrap items-center gap-2">
           <div className="inline-flex rounded-xl bg-zinc-100 p-1">
             {(
               [
@@ -669,15 +669,15 @@ export function RotaEditor(p: Props) {
             ))}
           </div>
           {!locked && (
-            <div className="relative">
+            <div className="sm:relative">
               <button className="btn-secondary" onClick={() => setTools(!tools)} aria-expanded={tools}><Icon name="grid" className="size-4" />Templates</button>
               {tools && (
-                <div className="absolute left-0 z-30 mt-2 w-[min(22rem,calc(100vw-2rem))] rounded-lg border border-zinc-200 bg-white p-3 shadow-lg">
+                <div className="absolute inset-x-0 z-30 mt-2 rounded-lg sm:right-auto sm:w-[22rem] border border-zinc-200 bg-white p-3 shadow-lg">
                   <div className="grid gap-1">
                     {p.prevWeek && <button className="btn-ghost justify-start" disabled={busy} onClick={() => copyFrom({ week: p.prevWeek! }, "Copied last week")}>Copy last week</button>}
                     {(p.templates2 ?? []).map((t) => (
                       <div key={t.id} className="flex items-center gap-1">
-                        <button className="btn-ghost flex-1 justify-start" disabled={busy} onClick={() => copyFrom({ templateId: t.id }, `Template "${t.name}"`)}>Use template: {t.name}</button>
+                        <button className="btn-ghost min-w-0 flex-1 justify-start truncate" disabled={busy} onClick={() => copyFrom({ templateId: t.id }, `Template "${t.name}"`)}>Use template: {t.name}</button>
                         <button className="btn-ghost btn-sm text-zinc-400" aria-label={`Delete template ${t.name}`} onClick={() => start(async () => { await deleteTemplate(p.storeId, t.id); })}><Icon name="x" className="size-4" /></button>
                       </div>
                     ))}
@@ -688,7 +688,7 @@ export function RotaEditor(p: Props) {
                       <>
                         <hr className="my-1 border-zinc-100" />
                         <div className="flex gap-2">
-                          <input value={tplName} onChange={(e) => setTplName(e.target.value)} maxLength={60} placeholder="Template name, e.g. Summer week" className="input flex-1" />
+                          <input value={tplName} onChange={(e) => setTplName(e.target.value)} maxLength={60} placeholder="Template name, e.g. Summer week" className="input min-w-0 flex-1" />
                           <button className="btn-primary" disabled={busy || !tplName.trim()} onClick={storeTemplate}>Save</button>
                         </div>
                       </>
