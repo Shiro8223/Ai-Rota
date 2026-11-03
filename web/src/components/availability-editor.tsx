@@ -5,7 +5,7 @@ import { dict, fill, type Dict } from "@/lib/i18n";
 import { DAYS, type Day, type WeekWindows, type Window } from "@/lib/types";
 
 /** Text the availability components show; defaults to English. */
-export type AvailabilityLabels = Pick<Dict, "off" | "anyTime" | "setTimes" | "addTime" | "saveAvailability" | "saving" | "saved" | "sending" | "fromWeek" | "forHowLong" | "week1" | "weeksN" | "reason" | "reasonPh" | "tempNote" | Day>;
+export type AvailabilityLabels = Pick<Dict, "off" | "anyTime" | "setTimes" | "addTime" | "saveAvailability" | "saving" | "saved" | "sending" | "fromWeek" | "forHowLong" | "week1" | "weeksN" | "reason" | "reasonPh" | "tempNote" | "tempOpen" | Day>;
 const EN = dict("en");
 
 const isAny = (w: Window[]) => w.length === 1 && w[0].from === "00:00" && (w[0].to === "24:00" || w[0].to === "23:59");
@@ -84,14 +84,24 @@ export function AvailabilityEditor({ initial, onSave, hint, submitLabel, labels 
  * It reverts to the usual pattern by itself, so nobody has to remember to undo it.
  */
 export function TemporaryAvailabilityForm({ weeks, initial, onSubmit, submitLabel, labels = EN }: { weeks: { value: string; label: string }[]; initial: WeekWindows; onSubmit: (input: { startWeek: string; weeks: number; note: string }, days: WeekWindows) => Promise<Result>; submitLabel: string; labels?: AvailabilityLabels }) {
+  // Collapsed by default: a dropdown, so the 7-day grid only appears when someone needs it.
+  const [open, setOpen] = useState(false);
   const [days, setDays] = useState<WeekWindows>(initial);
   const [startWeek, setStartWeek] = useState(weeks[0]?.value ?? "");
   const [count, setCount] = useState(4);
   const [note, setNote] = useState("");
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [pending, start] = useTransition();
+  const toggle = (
+    <button type="button" onClick={() => setOpen(!open)} aria-expanded={open} className="flex w-full items-center justify-between gap-3 rounded-xl border border-zinc-200 bg-white px-4 py-3 text-left text-[15px] font-medium hover:bg-zinc-50">
+      {labels.tempOpen}
+      <svg viewBox="0 0 24 24" className={`size-5 shrink-0 text-zinc-400 transition ${open ? "rotate-180" : ""}`} fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="m6 9 6 6 6-6" /></svg>
+    </button>
+  );
+  if (!open) return <>{toggle}{msg?.ok && <p className="mt-2 text-sm text-emerald-700">{msg.text}</p>}</>;
   return (
     <div className="space-y-4">
+      {toggle}
       <div className="grid gap-3 sm:grid-cols-3">
         <div>
           <label className="label" htmlFor="tw-start">{labels.fromWeek}</label>
@@ -119,6 +129,7 @@ export function TemporaryAvailabilityForm({ weeks, initial, onSubmit, submitLabe
             start(async () => {
               const r = await onSubmit({ startWeek, weeks: count, note }, days);
               setMsg({ ok: r.ok, text: r.ok ? r.info ?? labels.saved : r.error ?? "Couldn't save." });
+              if (r.ok) setOpen(false);
             })
           }
         >

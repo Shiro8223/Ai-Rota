@@ -134,10 +134,16 @@ export default async function OrgDashboard({ params }: { params: Promise<{ orgId
         <h2 className="eyebrow mb-3">People compliance · {compliance.length}</h2>
         <div className="card divide-y divide-zinc-100 p-0 sm:p-0">
           {compliance.slice(0, 25).map(({ site, f }, i) => (
-            <Link key={i} href={`/s/${site.id}/staff/${f.employeeId}`} className="flex flex-wrap items-center gap-3 px-4 py-3 hover:bg-zinc-50 sm:px-6">
-              <Badge tone={f.severity === "error" ? "red" : "amber"} icon="alert">{f.kind === "wage" ? "Minimum wage" : f.kind === "rtw" ? "Right to work" : "Qualification"}</Badge>
-              <span className="min-w-0 flex-1 text-sm">{f.message}</span>
-              <span className="rounded-md bg-teal-50 px-2 py-0.5 text-xs font-semibold text-teal-800">{site.name}</span>
+            <Link key={i} href={`/s/${site.id}/staff/${f.employeeId}`} className="flex items-start gap-3 px-4 py-3.5 hover:bg-zinc-50 sm:items-center sm:px-6">
+              <div className="min-w-0 flex-1 sm:flex sm:items-center sm:gap-3">
+                <div className="flex flex-wrap items-center gap-1.5 sm:w-56 sm:shrink-0">
+                  <Badge tone={f.severity === "error" ? "red" : "amber"} icon="alert">{f.kind === "wage" ? "Minimum wage" : f.kind === "rtw" ? "Right to work" : "Qualification"}</Badge>
+                  <span className="rounded-md bg-teal-50 px-2 py-0.5 text-xs font-semibold text-teal-800 sm:hidden">{site.name}</span>
+                </div>
+                <p className="mt-1.5 text-sm text-zinc-700 sm:mt-0 sm:flex-1">{f.message}</p>
+              </div>
+              <span className="hidden shrink-0 rounded-md bg-teal-50 px-2 py-0.5 text-xs font-semibold text-teal-800 sm:inline">{site.name}</span>
+              <Icon name="right" className="mt-1 size-4 shrink-0 text-zinc-300 sm:mt-0" />
             </Link>
           ))}
           {compliance.length > 25 && <p className="px-4 py-3 text-sm text-zinc-500 sm:px-6">+{compliance.length - 25} more on each site&apos;s Staff page.</p>}
@@ -149,14 +155,19 @@ export default async function OrgDashboard({ params }: { params: Promise<{ orgId
         <h2 className="eyebrow mb-3">Waiting for approval across all sites · {inbox.length}</h2>
         <div className="card divide-y divide-zinc-100 p-0 sm:p-0">
           {inbox.map((x, i) => (
-            <Link key={i} href={`/s/${x.site.id}/approvals`} className="flex flex-wrap items-center gap-3 px-4 py-3 hover:bg-zinc-50 sm:px-6">
+            <Link key={i} href={`/s/${x.site.id}/approvals`} className="flex items-start gap-3 px-4 py-3.5 hover:bg-zinc-50 sm:items-center sm:px-6">
               <Avatar name={x.who || "?"} size="sm" />
-              <div className="min-w-0 flex-1 text-sm">
-                <span className="font-medium">{x.who || "Someone"}</span> <span className="text-zinc-500">· {x.what}</span>
+              <div className="min-w-0 flex-1 sm:flex sm:items-center sm:gap-3">
+                <div className="min-w-0 text-sm sm:flex-1">
+                  <p className="font-medium">{x.who || "Someone"}</p>
+                  <p className="text-zinc-500">{x.what}</p>
+                </div>
+                <div className="mt-1.5 flex flex-wrap gap-1.5 sm:mt-0 sm:shrink-0">
+                  <Badge tone="violet">{x.kind}</Badge>
+                  <span className="rounded-md bg-teal-50 px-2 py-0.5 text-xs font-semibold text-teal-800">{x.site.name}</span>
+                </div>
               </div>
-              <Badge tone="violet">{x.kind}</Badge>
-              <span className="rounded-md bg-teal-50 px-2 py-0.5 text-xs font-semibold text-teal-800">{x.site.name}</span>
-              <Icon name="right" className="size-4 text-zinc-300" />
+              <Icon name="right" className="mt-1 size-4 shrink-0 text-zinc-300 sm:mt-0" />
             </Link>
           ))}
           {!inbox.length && <p className="px-4 py-5 text-sm text-zinc-500 sm:px-6">Nothing waiting at any site.</p>}

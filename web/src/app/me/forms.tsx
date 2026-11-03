@@ -3,6 +3,7 @@
 import { useActionState, useState, useTransition } from "react";
 import { Icon } from "@/components/icons";
 import { amountFor } from "@/lib/holidays";
+import { DateRangePicker } from "@/components/date-range-picker";
 import { dict, fill, type Dict } from "@/lib/i18n";
 import type { SwapState } from "./actions";
 
@@ -47,10 +48,10 @@ export function OfferButton({ action, labels = EN }: { action: (s: SwapState) =>
   );
 }
 
-type HL = Pick<Dict, "bookHoliday" | "fromDate" | "toDate" | "paidHoliday" | "unpaidHoliday" | "holidayNote" | "request" | "holidayUses" | "holidaySent" | "unitDays" | "unitHours" | "sending">;
+type HL = Pick<Dict, "bookHoliday" | "fromDate" | "toDate" | "paidHoliday" | "unpaidHoliday" | "holidayNote" | "request" | "holidayUses" | "holidaySent" | "unitDays" | "unitHours" | "sending" | "pickDates" | "pickStart" | "pickEnd" | "clearDates" | "prevMonth" | "nextMonth">;
 
 /** Holiday request: date range + paid/unpaid, previewing how much allowance it uses. */
-export function HolidayForm({ action, contractedHours, unit, labels = EN as HL }: { action: (input: unknown) => Promise<{ ok: boolean; error?: string }>; contractedHours: number; unit: "days" | "hours"; labels?: HL }) {
+export function HolidayForm({ action, contractedHours, unit, labels = EN as HL, locale = "en-GB" }: { action: (input: unknown) => Promise<{ ok: boolean; error?: string }>; contractedHours: number; unit: "days" | "hours"; labels?: HL; locale?: string }) {
   const today = new Date().toISOString().slice(0, 10);
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
@@ -71,16 +72,7 @@ export function HolidayForm({ action, contractedHours, unit, labels = EN as HL }
         });
       }}
     >
-      <div className="grid grid-cols-2 gap-3">
-        <div>
-          <label className="label" htmlFor="h-from">{labels.fromDate}</label>
-          <input id="h-from" type="date" min={today} className="input" value={from} onChange={(e) => { setFrom(e.target.value); if (!to || to < e.target.value) setTo(e.target.value); }} required />
-        </div>
-        <div>
-          <label className="label" htmlFor="h-to">{labels.toDate}</label>
-          <input id="h-to" type="date" min={from || today} className="input" value={to} onChange={(e) => setTo(e.target.value)} required />
-        </div>
-      </div>
+      <DateRangePicker from={from} to={to} min={today} locale={locale} labels={labels} onChange={(f, t2) => { setFrom(f); setTo(t2); setRes(null); }} />
       <div className="grid grid-cols-2 rounded-md bg-zinc-100 p-1">
         {[true, false].map((v) => (
           <button key={String(v)} type="button" onClick={() => setPaid(v)} className={`min-h-9 rounded-md text-sm font-medium ${paid === v ? "bg-white shadow-[var(--shadow-card)]" : "text-zinc-600"}`}>

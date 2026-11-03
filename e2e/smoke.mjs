@@ -70,7 +70,7 @@ try {
     return d.toISOString().slice(0, 10);
   });
   await m.goto(`${BASE}/s/demo-store/rota?week=${next}`);
-  await m.getByRole("button", { name: /Copy & templates/ }).click();
+  await m.getByRole("button", { name: /^Templates$/ }).click();
   await m.getByRole("button", { name: "Copy last week" }).click();
   await m.getByText(/Copied last week: \d+ shifts? filled/).waitFor({ timeout: 15000 });
   check("copy last week fills the draft", true);

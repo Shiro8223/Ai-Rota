@@ -18,6 +18,13 @@ export const LANG_KEYS = Object.keys(LANGS) as Lang[];
 export const isLang = (x: unknown): x is Lang => typeof x === "string" && x in LANGS;
 
 const en = {
+  tempOpen: "Set different hours for a while",
+  pickDates: "Choose dates",
+  pickStart: "Tap the first day",
+  pickEnd: "Now tap the last day",
+  clearDates: "Clear",
+  prevMonth: "Previous month",
+  nextMonth: "Next month",
   kTitle: "Clock in & breaks",
   kMorning: "Good morning!",
   kAfternoon: "Good afternoon!",
@@ -208,6 +215,13 @@ export type Dict = typeof en;
 export type Key = keyof Dict;
 
 const pl: Partial<Dict> = {
+  tempOpen: "Ustaw inne godziny na jakiś czas",
+  pickDates: "Wybierz daty",
+  pickStart: "Dotknij pierwszego dnia",
+  pickEnd: "Teraz dotknij ostatniego dnia",
+  clearDates: "Wyczyść",
+  prevMonth: "Poprzedni miesiąc",
+  nextMonth: "Następny miesiąc",
   kTitle: "Rejestracja czasu i przerwy",
   kMorning: "Dzień dobry!",
   kAfternoon: "Dzień dobry!",
@@ -310,6 +324,13 @@ const pl: Partial<Dict> = {
 };
 
 const ro: Partial<Dict> = {
+  tempOpen: "Setează alt program pentru o perioadă",
+  pickDates: "Alege datele",
+  pickStart: "Atinge prima zi",
+  pickEnd: "Acum atinge ultima zi",
+  clearDates: "Șterge",
+  prevMonth: "Luna anterioară",
+  nextMonth: "Luna următoare",
   kTitle: "Pontaj și pauze",
   kMorning: "Bună dimineața!",
   kAfternoon: "Bună ziua!",
@@ -412,6 +433,13 @@ const ro: Partial<Dict> = {
 };
 
 const es: Partial<Dict> = {
+  tempOpen: "Poner otro horario durante un tiempo",
+  pickDates: "Elige las fechas",
+  pickStart: "Toca el primer día",
+  pickEnd: "Ahora toca el último día",
+  clearDates: "Borrar",
+  prevMonth: "Mes anterior",
+  nextMonth: "Mes siguiente",
   kTitle: "Fichaje y descansos",
   kMorning: "¡Buenos días!",
   kAfternoon: "¡Buenas tardes!",
@@ -514,6 +542,13 @@ const es: Partial<Dict> = {
 };
 
 const pt: Partial<Dict> = {
+  tempOpen: "Definir outro horário durante algum tempo",
+  pickDates: "Escolher datas",
+  pickStart: "Toca no primeiro dia",
+  pickEnd: "Agora toca no último dia",
+  clearDates: "Limpar",
+  prevMonth: "Mês anterior",
+  nextMonth: "Mês seguinte",
   kTitle: "Registo de ponto e pausas",
   kMorning: "Bom dia!",
   kAfternoon: "Boa tarde!",
@@ -616,6 +651,13 @@ const pt: Partial<Dict> = {
 };
 
 const it: Partial<Dict> = {
+  tempOpen: "Imposta orari diversi per un periodo",
+  pickDates: "Scegli le date",
+  pickStart: "Tocca il primo giorno",
+  pickEnd: "Ora tocca l'ultimo giorno",
+  clearDates: "Cancella",
+  prevMonth: "Mese precedente",
+  nextMonth: "Mese successivo",
   kTitle: "Timbrature e pause",
   kMorning: "Buongiorno!",
   kAfternoon: "Buon pomeriggio!",
@@ -718,6 +760,13 @@ const it: Partial<Dict> = {
 };
 
 const fr: Partial<Dict> = {
+  tempOpen: "Indiquer d'autres horaires pour un temps",
+  pickDates: "Choisir les dates",
+  pickStart: "Touchez le premier jour",
+  pickEnd: "Touchez maintenant le dernier jour",
+  clearDates: "Effacer",
+  prevMonth: "Mois précédent",
+  nextMonth: "Mois suivant",
   kTitle: "Pointage et pauses",
   kMorning: "Bonjour !",
   kAfternoon: "Bon après-midi !",
@@ -820,6 +869,13 @@ const fr: Partial<Dict> = {
 };
 
 const uk: Partial<Dict> = {
+  tempOpen: "Встановити інші години на певний час",
+  pickDates: "Виберіть дати",
+  pickStart: "Торкніться першого дня",
+  pickEnd: "Тепер торкніться останнього дня",
+  clearDates: "Очистити",
+  prevMonth: "Попередній місяць",
+  nextMonth: "Наступний місяць",
   kTitle: "Облік часу та перерви",
   kMorning: "Доброго ранку!",
   kAfternoon: "Добрий день!",

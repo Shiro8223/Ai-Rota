@@ -142,7 +142,8 @@ export function RotaEditor(p: Props) {
       setExceptions([]);
       setIssues(r.issues);
       setDirty(false);
-      setMessage({ tone: "ok", text: `Rota built in ${r.seconds ?? "?"}s. Review it, adjust anything, then approve.${r.missingAvailability.length ? ` Not scheduled (no availability yet): ${r.missingAvailability.join(", ")}.` : ""}` });
+      // The rule pill shows the result; only say something if people were left out.
+      setMessage(r.missingAvailability.length ? { tone: "ok", text: `Not scheduled (no availability yet): ${r.missingAvailability.join(", ")}.` } : null);
     });
   const save = () =>
     start(async () => {
@@ -674,8 +675,30 @@ export function RotaEditor(p: Props) {
             </a>
           )}
           {!locked && (
+            <div className="flex w-full flex-wrap gap-2 sm:ml-auto sm:w-auto">
+              {(p.hasRota || assignments.length > 0) && (
+                <button className="btn-secondary flex-1 sm:flex-none" onClick={generate} disabled={busy}>
+                  <Icon name="wand" className="size-4" />Regenerate
+                </button>
+              )}
+              {assignments.length > 0 && (
+                <>
+                  <button className="btn-secondary flex-1 sm:flex-none" onClick={save} disabled={busy || !dirty}>Save draft</button>
+                  {p.canPublish && (
+                    <button className="btn-primary flex-1 sm:flex-none" onClick={approve} disabled={busy || checking || legal > 0}>
+                      <Icon name="lock" className="size-4" /> Approve &amp; publish
+                    </button>
+                  )}
+                </>
+              )}
+            </div>
+          )}
+        </div>
+
+        {!locked && (
+          <div className="no-print mb-4 flex flex-wrap items-center gap-3">
             <div className="relative">
-              <button className="btn-secondary" onClick={() => setTools(!tools)} aria-expanded={tools}><Icon name="grid" className="size-4" />Copy &amp; templates</button>
+              <button className="btn-secondary" onClick={() => setTools(!tools)} aria-expanded={tools}><Icon name="grid" className="size-4" />Templates</button>
               {tools && (
                 <div className="absolute left-0 z-30 mt-2 w-[min(22rem,calc(100vw-2rem))] rounded-lg border border-zinc-200 bg-white p-3 shadow-lg">
                   <div className="grid gap-1">
@@ -702,27 +725,14 @@ export function RotaEditor(p: Props) {
                 </div>
               )}
             </div>
-          )}
-          {!locked && (
-            <div className="flex w-full flex-wrap gap-2 sm:ml-auto sm:w-auto">
-              <button className={p.hasRota || assignments.length ? "btn-secondary flex-1 sm:flex-none" : "btn-primary flex-1 sm:flex-none"} onClick={generate} disabled={busy}>
-                <Icon name="wand" className="size-4" />
-                {p.hasRota || assignments.length ? "Regenerate" : "Generate rota"}
-              </button>
-              {assignments.length > 0 && (
-                <>
-                  <button className="btn-secondary flex-1 sm:flex-none" onClick={save} disabled={busy || !dirty}>Save draft</button>
-                  {p.canPublish && (
-                    <button className="btn-primary flex-1 sm:flex-none" onClick={approve} disabled={busy || checking || legal > 0}>
-                      <Icon name="lock" className="size-4" /> Approve &amp; publish
-                    </button>
-                  )}
-                </>
-              )}
-            </div>
-          )}
-        </div>
-
+            {message && message.tone !== "err" && (
+              <span className={`flex items-center gap-2 text-sm ${message.tone === "busy" ? "text-sky-800" : "text-zinc-600"}`} role="status">
+                {message.tone === "busy" && <span className="size-3 animate-spin rounded-full border-2 border-sky-600 border-t-transparent" />}
+                {message.text}
+              </span>
+            )}
+          </div>
+        )}
         {!locked && assignments.length > 0 && (legal > 0 || errors.length > 0 || dirty || pendingAsks > 0) && (
           <div className="no-print mb-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
             {legal > 0 && <span className="flex items-center gap-1.5 font-medium text-red-700"><Icon name="shield" className="size-4" />{legal} legal or contract problem{legal > 1 ? "s" : ""} must be fixed before publishing</span>}
@@ -738,12 +748,9 @@ export function RotaEditor(p: Props) {
           </div>
         )}
 
-        {message && (
-          <div className={`mb-4 rounded-2xl border px-4 py-3 text-sm ${message.tone === "ok" ? "border-emerald-200 bg-emerald-50 text-emerald-950" : message.tone === "busy" ? "border-sky-200 bg-sky-50 text-sky-950" : "border-red-200 bg-red-50 text-red-950"}`}>
-            <div className="flex items-center gap-2">
-              {message.tone === "busy" && <span className="size-3 animate-spin rounded-full border-2 border-sky-600 border-t-transparent" />}
-              {message.text}
-            </div>
+        {message?.tone === "err" && (
+          <div className="mb-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-950" role="alert">
+            <div className="flex items-center gap-2">{message.text}</div>
             {message.reasons && <ul className="mt-1.5 list-disc pl-5">{message.reasons.map((r) => <li key={r}>{r}</li>)}</ul>}
           </div>
         )}

@@ -42,7 +42,6 @@ export default async function OrgLayout({ children, params }: { children: React.
             <span className="truncate text-[15px] font-semibold">{org.name}</span>
           </Link>
           <div className="ml-auto flex shrink-0 items-center gap-2">
-            {isDemo() && <Badge tone="blue">Demo</Badge>}
             <div className="hidden md:block"><AccountMenu name={actor} sub={org.name}>{account}</AccountMenu></div>
             <OrgMenu links={links} home={home} sites={sites.map((s) => ({ id: s.id, name: s.name }))} who={actor} extra={account} />
           </div>

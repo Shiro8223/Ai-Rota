@@ -51,7 +51,6 @@ export default async function StoreLayout({ children, params }: { children: Reac
           </div>
           <div className="ml-auto flex shrink-0 items-center gap-2">
             {!healthy && <Badge tone="red" icon="alert">Solver offline</Badge>}
-            {isDemo() && <span className="hidden sm:inline"><Badge tone="blue">Demo</Badge></span>}
             {employee && <Link href="/me" className="btn-secondary btn-sm"><Icon name="left" className="size-4" /><span className="hidden sm:inline">{t.myShifts}</span></Link>}
             <AccountMenu name={employee?.name ?? actor} sub={employee ? store.name : org ? `${org.name}` : undefined}>
               <label className="mb-2 block px-2 text-xs text-zinc-500">

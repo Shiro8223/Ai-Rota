@@ -137,7 +137,6 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
             </div>
           </div>
           <div className="flex items-center gap-2">
-            {isDemo() && <span className="hidden rounded-md bg-white/10 px-2 py-0.5 text-[11px] sm:inline">Demo</span>}
             {pushConfigured() && <PushToggle vapidKey={process.env.VAPID_PUBLIC_KEY!} save={savePush} label="🔔" />}
             <LanguagePicker lang={lang} label={t.language} tone="dark" />
             <form action={logout}><button className="grid size-9 place-items-center rounded-md bg-white/10" aria-label={t.signOut}><Icon name="logout" className="size-4" /></button></form>
@@ -383,7 +382,7 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
               <div className="mt-3 h-2 rounded-sm bg-zinc-200"><div className="h-2 rounded-sm bg-brand-500" style={{ width: `${hb.allowance ? Math.min(100, ((hb.used + hb.pending) / hb.allowance) * 100) : 0}%` }} /></div>
             </div>
             <Section title={t.bookHoliday}>
-              <HolidayForm action={requestHoliday} contractedHours={employee.contractedHours} unit={hb.unit} labels={t} />
+              <HolidayForm action={requestHoliday} contractedHours={employee.contractedHours} unit={hb.unit} labels={t} locale={lang === "en" ? "en-GB" : lang} />
             </Section>
             <section>
               <h2 className="eyebrow mb-2">{t.myHoliday}</h2>

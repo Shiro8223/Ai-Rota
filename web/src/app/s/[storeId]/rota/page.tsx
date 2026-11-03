@@ -85,7 +85,18 @@ export default async function RotaPage({ params, searchParams }: { params: Promi
         </div>
         {rota && (
           <div className="flex gap-2">
-            {hasFeature(store.features, "print") && <Link href={`/s/${storeId}/rota/print?week=${week}`} className="btn-secondary" target="_blank"><Icon name="print" className="size-4" /><span className="hidden sm:inline">Print A4</span></Link>}
+            {hasFeature(store.features, "print") && (
+              <details className="group relative">
+                <summary className="btn-secondary cursor-pointer list-none [&::-webkit-details-marker]:hidden"><Icon name="print" className="size-4" /><span className="hidden sm:inline">Print</span></summary>
+                <div className="absolute right-0 z-30 mt-2 w-56 rounded-lg border border-zinc-200 bg-white p-1.5 shadow-lg">
+                  <p className="px-2.5 pt-1 pb-1.5 text-xs text-zinc-500">Print an A4 rota for</p>
+                  <a href={`/s/${storeId}/rota/print?week=${week}`} target="_blank" className="flex h-9 items-center rounded-md px-2.5 text-sm font-medium hover:bg-zinc-100">Everyone</a>
+                  {roles.filter((r) => r.category === "job" && r.storeId === storeId).map((r) => (
+                    <a key={r.id} href={`/s/${storeId}/rota/print?week=${week}&role=${r.id}`} target="_blank" className="flex h-9 items-center rounded-md px-2.5 text-sm hover:bg-zinc-100">{r.name}</a>
+                  ))}
+                </div>
+              </details>
+            )}
             {rota.status === "approved" && canPublish && (
               <form action={unlockRota.bind(null, storeId, week)}>
                 <button className="btn-secondary"><Icon name="lock" className="size-4" />Unlock to edit</button>
