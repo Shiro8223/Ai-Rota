@@ -2,6 +2,7 @@
 
 import { useActionState, useState, useTransition } from "react";
 import { RolePicker, type RoleOption } from "@/components/role-picker";
+import { DateField } from "@/components/date-field";
 import type { Employee } from "@/lib/types";
 import type { StaffFormState } from "./actions";
 
@@ -27,8 +28,7 @@ export function EmployeeForm({ action, employee, submit, roles, canGrantAccess }
           <input name="name" className="input" defaultValue={employee?.name} required />
         </div>
         <div className="col-span-2 md:col-span-1">
-          <label className="label">Start date</label>
-          <input name="startDate" type="date" className="input" defaultValue={employee?.startDate ?? new Date().toISOString().slice(0, 10)} required />
+          <DateField name="startDate" label="Start date" defaultValue={employee?.startDate ?? new Date().toISOString().slice(0, 10)} required />
         </div>
         <div className="col-span-2 md:col-span-1">
           <label className="label">Email (optional)</label>

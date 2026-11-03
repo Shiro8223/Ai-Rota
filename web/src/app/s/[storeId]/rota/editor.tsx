@@ -668,35 +668,7 @@ export function RotaEditor(p: Props) {
               </button>
             ))}
           </div>
-          {assignments.length > 0 && (
-            <a href="#rule-check" className={`flex min-h-9 items-center gap-1.5 rounded-xl px-3 text-sm font-medium ${errors.length ? "bg-red-50 text-red-700" : issues.some((i) => i.severity === "warning") ? "bg-amber-50 text-amber-800" : "bg-emerald-50 text-emerald-700"}`}>
-              <Icon name={errors.length ? "alert" : "shield"} className="size-4" />
-              {checking ? "Checking…" : errors.length ? `${errors.length} problem${errors.length > 1 ? "s" : ""}` : issues.some((i) => i.severity === "warning") ? "Check warnings" : "All rules met"}
-            </a>
-          )}
           {!locked && (
-            <div className="flex w-full flex-wrap gap-2 sm:ml-auto sm:w-auto">
-              {(p.hasRota || assignments.length > 0) && (
-                <button className="btn-secondary flex-1 sm:flex-none" onClick={generate} disabled={busy}>
-                  <Icon name="wand" className="size-4" />Regenerate
-                </button>
-              )}
-              {assignments.length > 0 && (
-                <>
-                  <button className="btn-secondary flex-1 sm:flex-none" onClick={save} disabled={busy || !dirty}>Save draft</button>
-                  {p.canPublish && (
-                    <button className="btn-primary flex-1 sm:flex-none" onClick={approve} disabled={busy || checking || legal > 0}>
-                      <Icon name="lock" className="size-4" /> Approve &amp; publish
-                    </button>
-                  )}
-                </>
-              )}
-            </div>
-          )}
-        </div>
-
-        {!locked && (
-          <div className="no-print mb-4 flex flex-wrap items-center gap-3">
             <div className="relative">
               <button className="btn-secondary" onClick={() => setTools(!tools)} aria-expanded={tools}><Icon name="grid" className="size-4" />Templates</button>
               {tools && (
@@ -725,12 +697,40 @@ export function RotaEditor(p: Props) {
                 </div>
               )}
             </div>
-            {message && message.tone !== "err" && (
-              <span className={`flex items-center gap-2 text-sm ${message.tone === "busy" ? "text-sky-800" : "text-zinc-600"}`} role="status">
-                {message.tone === "busy" && <span className="size-3 animate-spin rounded-full border-2 border-sky-600 border-t-transparent" />}
-                {message.text}
-              </span>
-            )}
+          )}
+          {assignments.length > 0 && (
+            <a href="#rule-check" className={`flex min-h-9 items-center gap-1.5 rounded-xl px-3 text-sm font-medium ${errors.length ? "bg-red-50 text-red-700" : issues.some((i) => i.severity === "warning") ? "bg-amber-50 text-amber-800" : "bg-emerald-50 text-emerald-700"}`}>
+              <Icon name={errors.length ? "alert" : "shield"} className="size-4" />
+              {checking ? "Checking…" : errors.length ? `${errors.length} problem${errors.length > 1 ? "s" : ""}` : issues.some((i) => i.severity === "warning") ? "Check warnings" : "All rules met"}
+            </a>
+          )}
+          {!locked && (
+            <div className="flex w-full flex-wrap gap-2 sm:ml-auto sm:w-auto">
+              {(p.hasRota || assignments.length > 0) && (
+                <button className="btn-secondary flex-1 sm:flex-none" onClick={generate} disabled={busy}>
+                  <Icon name="wand" className="size-4" />Regenerate
+                </button>
+              )}
+              {assignments.length > 0 && (
+                <>
+                  <button className="btn-secondary flex-1 sm:flex-none" onClick={save} disabled={busy || !dirty}>Save draft</button>
+                  {p.canPublish && (
+                    <button className="btn-primary flex-1 sm:flex-none" onClick={approve} disabled={busy || checking || legal > 0}>
+                      <Icon name="lock" className="size-4" /> Approve &amp; publish
+                    </button>
+                  )}
+                </>
+              )}
+            </div>
+          )}
+        </div>
+
+        {!locked && message && message.tone !== "err" && (
+          <div className="no-print -mt-1 mb-4">
+            <span className={`flex items-center gap-2 text-sm ${message.tone === "busy" ? "text-sky-800" : "text-zinc-600"}`} role="status">
+              {message.tone === "busy" && <span className="size-3 animate-spin rounded-full border-2 border-sky-600 border-t-transparent" />}
+              {message.text}
+            </span>
           </div>
         )}
         {!locked && assignments.length > 0 && (legal > 0 || errors.length > 0 || dirty || pendingAsks > 0) && (
