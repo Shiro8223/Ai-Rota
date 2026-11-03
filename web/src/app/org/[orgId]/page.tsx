@@ -100,7 +100,7 @@ export default async function OrgDashboard({ params }: { params: Promise<{ orgId
                   <h2 className="truncate text-lg font-semibold">{c.site.name}</h2>
                   <p className="text-sm text-zinc-500">{c.own.length} staff{c.visiting ? ` + ${c.visiting} visiting` : ""} · code {c.site.joinCode}</p>
                 </div>
-                <Link href={`/s/${c.site.id}/rota`} className="btn-secondary btn-sm">Open<Icon name="right" className="size-4" /></Link>
+                <Link href={`/s/${c.site.id}/rota`} className="btn-primary btn-sm">Open<Icon name="right" className="size-4" /></Link>
               </div>
               <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
                 <div className="rounded-md bg-zinc-50 p-3"><dt className="text-xs text-zinc-500">This week</dt><dd className="mt-1"><RotaPill rota={c.thisRota} /></dd></div>
